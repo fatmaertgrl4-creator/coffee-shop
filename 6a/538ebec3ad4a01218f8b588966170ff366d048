@@ -1,0 +1,19 @@
+CLAUDE.md
+  s_e381d7b6a5ce6e::t_d3109d1d5f0e04 1-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6a538ebec3ad4a01218f8b588966170ff366d048",
+  "prompts": {},
+  "sessions": {
+    "s_e381d7b6a5ce6e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e4cf60a2-80a8-4f3f-a3f6-8f2218c5e248",
+        "model": "claude-haiku-5-5"
+      },
+      "human_author": "FATMA ERTUGRUL <fatma.ertugrul@turkcell.com.tr>"
+    }
+  }
+}

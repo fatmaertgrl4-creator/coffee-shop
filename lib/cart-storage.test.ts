@@ -1,5 +1,26 @@
 import { describe, expect, it } from "vitest";
-import { parseStored, parseStoredCoupon } from "@/lib/cart-storage";
+import { listedLines, parseStored, parseStoredCoupon } from "@/lib/cart-storage";
+import type { Product } from "@/types/domain";
+
+const product = (id: string) => ({ id }) as Product;
+
+describe("listedLines", () => {
+  it("keeps only the lines whose product is listed, in cart order", () => {
+    const items = [
+      { productId: "espresso", quantity: 2 },
+      { productId: "ghost-item", quantity: 1 },
+      { productId: "latte", quantity: 1 },
+    ];
+    expect(listedLines(items, [product("latte"), product("espresso")])).toEqual([
+      { productId: "espresso", quantity: 2 },
+      { productId: "latte", quantity: 1 },
+    ]);
+  });
+
+  it("returns an empty list when no product is listed", () => {
+    expect(listedLines([{ productId: "ghost-item", quantity: 1 }], [])).toEqual([]);
+  });
+});
 
 describe("parseStoredCoupon", () => {
   it("returns null for absent or blank storage", () => {

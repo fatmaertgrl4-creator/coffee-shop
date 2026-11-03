@@ -16,8 +16,7 @@ export function CartView({ products }: { products: Product[] }) {
     .map((item) => ({ item, product: products.find((p) => p.id === item.productId) }))
     .filter((row): row is { item: CartItem; product: Product } => Boolean(row.product));
 
-  const subtotal = rows.reduce((sum, row) => sum + row.product.price * row.item.quantity, 0);
-  const { applied, error, apply, remove } = useCoupon(subtotal);
+  const { subtotal, applied, error, apply, remove } = useCoupon(products);
   const total = applied ? applied.total : subtotal;
 
   const submitCoupon = async (e: FormEvent<HTMLFormElement>) => {

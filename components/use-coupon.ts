@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useCart, type CartItem } from "@/components/cart-context";
-import type { CouponPreview } from "@/types/domain";
+import { listedLines } from "@/lib/cart-storage";
+import type { CouponPreview, Product } from "@/types/domain";
 
 const NETWORK_ERROR = "Could not check the coupon. Try again.";
 
@@ -21,13 +22,22 @@ const requestPreview = async (code: string, items: CartItem[]): Promise<PreviewR
 };
 
 /**
- * The coupon applied to the cart, priced by the server. `applied` is null when no
- * usable coupon is set, or when the last preview was for a different subtotal
- * (the cart changed and the refetch has not returned yet). Callers pass the
- * current client subtotal so a stale discount is never shown or charged.
+ * The coupon applied to the cart, priced by the server over the lines listed in
+ * `products`. `applied` is null when no usable coupon is set, or when the last
+ * preview was for a different subtotal (the cart changed and the refetch has not
+ * returned yet), so a stale discount is never shown or charged.
  */
-export function useCoupon(subtotal: number) {
-  const { items, coupon, setCoupon } = useCart();
+export function useCoupon(products: Product[]) {
+  const { items: cartItems, coupon, setCoupon } = useCart();
+  const items = useMemo(() => listedLines(cartItems, products), [cartItems, products]);
+  const subtotal = useMemo(
+    () =>
+      items.reduce(
+        (sum, item) => sum + (products.find((p) => p.id === item.productId)?.price ?? 0) * item.quantity,
+        0
+      ),
+    [items, products]
+  );
   const [couponPreview, setCouponPreview] = useState<CouponPreview | null>(null);
   const [error, setError] = useState<string | null>(null);
   // Bumped by every apply and remove, so a slow apply cannot override a later action.
@@ -83,6 +93,7 @@ export function useCoupon(subtotal: number) {
   const isCurrent = couponPreview !== null && couponPreview.subtotal === subtotal;
 
   return {
+    subtotal,
     applied: coupon && isCurrent ? couponPreview : null,
     error,
     apply,

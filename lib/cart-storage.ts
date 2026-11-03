@@ -1,4 +1,13 @@
+import type { Product } from "@/types/domain";
+
 export type CartItem = { productId: string; quantity: number };
+
+/**
+ * The cart lines the page actually shows. A stored line for a product that is no
+ * longer listed is hidden from the cart, so it must not be sent for pricing either.
+ */
+export const listedLines = (items: CartItem[], products: Product[]): CartItem[] =>
+  items.filter((item) => products.some((product) => product.id === item.productId));
 
 export const STORAGE_KEY = "midnight-coffee-cart";
 

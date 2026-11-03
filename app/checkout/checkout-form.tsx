@@ -21,8 +21,7 @@ export function CheckoutForm({ products }: { products: Product[] }) {
     .map((item) => ({ item, product: products.find((p) => p.id === item.productId) }))
     .filter((row): row is { item: CartItem; product: Product } => Boolean(row.product));
 
-  const subtotal = rows.reduce((sum, row) => sum + row.product.price * row.item.quantity, 0);
-  const { applied, error: couponError } = useCoupon(subtotal);
+  const { subtotal, applied, error: couponError } = useCoupon(products);
   const total = applied ? applied.total : subtotal;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {

@@ -1,9 +1,10 @@
 import { listOrders, listProducts } from "@/lib/store";
+import seedCoupons from "@/data/coupons.json";
 import seedProducts from "@/data/products.json";
 import { ADMIN_COOKIE, ADMIN_COOKIE_VALUE } from "@/lib/session";
-import type { Order, Product } from "@/types/domain";
+import type { Coupon, Order, Product } from "@/types/domain";
 
-type Store = { products: Product[]; orders: Order[] };
+type Store = { products: Product[]; orders: Order[]; coupons: Coupon[] };
 
 const globalStore = globalThis as typeof globalThis & { __midnightCoffeeStore?: Store };
 
@@ -17,6 +18,7 @@ export function resetStore() {
   if (!store) throw new Error("store singleton was not initialized");
   store.products = structuredClone(seedProducts) as Product[];
   store.orders = [];
+  store.coupons = structuredClone(seedCoupons) as Coupon[];
 
   // Confirm through the public API that the reassignment actually took effect.
   // The comment above depends on lib/store.ts reading store.* at call time; if

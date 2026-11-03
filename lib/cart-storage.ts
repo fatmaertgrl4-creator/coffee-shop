@@ -2,6 +2,15 @@ export type CartItem = { productId: string; quantity: number };
 
 export const STORAGE_KEY = "midnight-coffee-cart";
 
+// Kept apart from the cart items so a stored cart written before coupons existed still parses.
+export const COUPON_STORAGE_KEY = "midnight-coffee-coupon";
+
+/** Blank or non-string stored values mean no coupon. */
+export const parseStoredCoupon = (raw: string | null): string | null => {
+  const code = raw?.trim() ?? "";
+  return code === "" ? null : code;
+};
+
 /**
  * Parses persisted cart JSON, dropping anything that is not a usable line item.
  *

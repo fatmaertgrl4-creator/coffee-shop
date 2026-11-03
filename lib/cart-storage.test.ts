@@ -1,5 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { parseStored } from "@/lib/cart-storage";
+import { parseStored, parseStoredCoupon } from "@/lib/cart-storage";
+
+describe("parseStoredCoupon", () => {
+  it("returns null for absent or blank storage", () => {
+    expect(parseStoredCoupon(null)).toBeNull();
+    expect(parseStoredCoupon("")).toBeNull();
+    expect(parseStoredCoupon("   ")).toBeNull();
+  });
+
+  it("returns the trimmed code", () => {
+    expect(parseStoredCoupon("  YAZ10 ")).toBe("YAZ10");
+  });
+});
 
 describe("parseStored", () => {
   it("returns an empty cart for absent storage", () => {

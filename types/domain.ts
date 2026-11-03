@@ -21,6 +21,20 @@ export type Customer = {
   address: string;
 };
 
+export type Coupon = {
+  code: string;
+  percent: number;
+  expiresAt: string;
+};
+
+export type CouponPreview = {
+  code: string;
+  percent: number;
+  subtotal: number;
+  discountAmount: number;
+  total: number;
+};
+
 export type OrderItem = {
   productId: string;
   productName: string;

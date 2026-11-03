@@ -1,0 +1,47 @@
+app/api/orders/route.ts
+  s_8c8d88acd44796::t_f9f230ff33ebab 87-89
+  s_8c8d88acd44796::t_8eeeedfd66e872 2-3,8-10
+  s_8c8d88acd44796::t_aaa509e99bf7e5 54-56,58-63
+  s_8c8d88acd44796::t_4bb077ac97dfab 21
+  s_8c8d88acd44796::t_610155831f386c 57
+app/cart/cart-view.tsx
+  s_8c8d88acd44796::t_71c3bbe1415a03 5,7,9,12,21-28,65,74-75,77-79
+  s_8c8d88acd44796::t_39dd1578e8cbce 20
+app/api/orders/[id]/route.test.ts
+  s_8c8d88acd44796::t_a35f64c824ba96 14-15
+components/cart-context.tsx
+  s_8c8d88acd44796::t_4e18b396f715fb 67-70
+app/checkout/checkout-form.tsx
+  s_8c8d88acd44796::t_84b6775ffd9b29 7,24,26
+  s_8c8d88acd44796::t_7143878375f9d3 25
+  s_8c8d88acd44796::t_a5c76c6fc3b902 42-43
+  s_8c8d88acd44796::t_bcb5965dac5dae 119-125
+components/use-coupon.ts
+  s_8c8d88acd44796::t_78d501b55c1172 25-27,29,31,34-35,38,46,49,71,79-80,82
+  s_8c8d88acd44796::t_47cb6e0edd859a 1-24,28,30,32-33,36-37,39-45,47-48,50-70,72-78,81,83-87
+types/domain.ts
+  s_8c8d88acd44796::t_270aa39c7139de 50-51
+lib/store.test.ts
+  s_8c8d88acd44796::t_243d23999a6c1e 35-36
+app/api/orders/route.test.ts
+  s_8c8d88acd44796::t_1b53fd5ea967fc 304-334,342-373
+  s_8c8d88acd44796::t_704a46703bad1d 335-341
+app/confirmation/page.tsx
+  s_8c8d88acd44796::t_9af5529954b77a 38-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "17b25be8ea41a285356bf8c844c63ec3f28cc797",
+  "prompts": {},
+  "sessions": {
+    "s_8c8d88acd44796": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d392c758-5b52-44a5-ae92-90b89558add6",
+        "model": "claude-haiku-5-5"
+      },
+      "human_author": "FATMA ERTUGRUL <fatma.ertugrul@turkcell.com.tr>"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+app/checkout/checkout-form.tsx
+  s_8c8d88acd44796::t_e570631ea4853d 15
+  s_8c8d88acd44796::t_cf03b6aa87e2fd 59
+  s_8c8d88acd44796::t_ba244ef05a2236 60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8e2df201257edb1c50c9a42da3d05ce7c8325cee",
+  "prompts": {},
+  "sessions": {
+    "s_8c8d88acd44796": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d392c758-5b52-44a5-ae92-90b89558add6",
+        "model": "claude-haiku-5-5"
+      },
+      "human_author": "FATMA ERTUGRUL <fatma.ertugrul@turkcell.com.tr>"
+    }
+  }
+}

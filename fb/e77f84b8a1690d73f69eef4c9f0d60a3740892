@@ -1,0 +1,23 @@
+components/use-coupon.ts
+  s_6ab1105fa0ae09::t_950d5d39ee1b92 1
+  s_6ab1105fa0ae09::t_2aba7096ec668f 90
+  s_6ab1105fa0ae09::t_5a40e1f118c016 33-34
+  s_6ab1105fa0ae09::t_677851c7313cc3 65,69,78
+  s_6ab1105fa0ae09::t_ccfd0d6a153bbe 89,91-93
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fbe77f84b8a1690d73f69eef4c9f0d60a3740892",
+  "prompts": {},
+  "sessions": {
+    "s_6ab1105fa0ae09": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7fb9b1b7-9c31-4c16-ac91-2834c02897bc",
+        "model": "claude-haiku-5-5"
+      },
+      "human_author": "FATMA ERTUGRUL <fatma.ertugrul@turkcell.com.tr>"
+    }
+  }
+}

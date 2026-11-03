@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart, type CartItem } from "@/components/cart-context";
 import type { CouponPreview } from "@/types/domain";
 
@@ -30,6 +30,8 @@ export function useCoupon(subtotal: number) {
   const { items, coupon, setCoupon } = useCart();
   const [couponPreview, setCouponPreview] = useState<CouponPreview | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // Bumped by every apply and remove, so a slow apply cannot override a later action.
+  const requestId = useRef(0);
 
   // Re-price whenever the cart changes. A coupon the server rejects is dropped;
   // a cart problem leaves it in place.
@@ -60,9 +62,11 @@ export function useCoupon(subtotal: number) {
 
   // Resolves true when the server accepted the code and it is now applied.
   const apply = async (code: string): Promise<boolean> => {
+    const id = ++requestId.current;
     setError(null);
     try {
       const result = await requestPreview(code, items);
+      if (id !== requestId.current) return false;
       if (!result.ok) {
         setError(result.error);
         return false;
@@ -71,7 +75,7 @@ export function useCoupon(subtotal: number) {
       setCouponPreview(result.preview);
       return true;
     } catch {
-      setError(NETWORK_ERROR);
+      if (id === requestId.current) setError(NETWORK_ERROR);
       return false;
     }
   };
@@ -82,6 +86,10 @@ export function useCoupon(subtotal: number) {
     applied: coupon && isCurrent ? couponPreview : null,
     error,
     apply,
-    remove: () => setCoupon(null),
+    remove: () => {
+      requestId.current++;
+      setError(null);
+      setCoupon(null);
+    },
   };
 }

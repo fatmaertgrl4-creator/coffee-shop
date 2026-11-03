@@ -64,7 +64,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
           if (quantity <= 0) return prev.filter((item) => item.productId !== productId);
           return prev.map((item) => (item.productId === productId ? { ...item, quantity } : item));
         }),
-      clear: () => setItems([]),
+      clear: () => {
+        setItems([]);
+        setCoupon(null);
+      },
     }),
     [items, coupon]
   );

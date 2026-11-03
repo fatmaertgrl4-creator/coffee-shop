@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart, type CartItem } from "@/components/cart-context";
+import { useCoupon } from "@/components/use-coupon";
 import { formatPrice } from "@/lib/format";
 import { formatExpiry } from "@/lib/expiry";
 import { errorMessage } from "@/lib/api-error";
@@ -20,7 +21,9 @@ export function CheckoutForm({ products }: { products: Product[] }) {
     .map((item) => ({ item, product: products.find((p) => p.id === item.productId) }))
     .filter((row): row is { item: CartItem; product: Product } => Boolean(row.product));
 
-  const total = rows.reduce((sum, row) => sum + row.product.price * row.item.quantity, 0);
+  const subtotal = rows.reduce((sum, row) => sum + row.product.price * row.item.quantity, 0);
+  const { applied, error: couponError } = useCoupon(subtotal);
+  const total = applied ? applied.total : subtotal;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -36,6 +39,8 @@ export function CheckoutForm({ products }: { products: Product[] }) {
         address: form.get("address"),
       },
       items: rows.map(({ item }) => ({ productId: item.productId, quantity: item.quantity })),
+      // Only a coupon the customer can see as applied is charged, so the total on screen is the total paid.
+      couponCode: applied ? applied.code : null,
       card: {
         number: form.get("cardNumber"),
         expiry: form.get("expiry"),
@@ -111,6 +116,13 @@ export function CheckoutForm({ products }: { products: Product[] }) {
               </li>
             ))}
           </ul>
+          {couponError && <p className="coupon-error" role="alert">{couponError}</p>}
+          {applied && (
+            <div className="cart-discount">
+              <span>Coupon {applied.code} (−{applied.percent}%)</span>
+              <strong>−{formatPrice(applied.discountAmount)}</strong>
+            </div>
+          )}
           <div className="cart-total">
             <span>Total</span>
             <strong>{formatPrice(total)}</strong>

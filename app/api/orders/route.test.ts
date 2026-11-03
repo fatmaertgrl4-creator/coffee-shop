@@ -301,3 +301,73 @@ describe("POST /api/orders — success", () => {
     expect(listOrders()).toHaveLength(2);
   });
 });
+
+describe("POST /api/orders — coupon", () => {
+  // Espresso is 12 000 kuruş, so two of them are 24 000. YAZ10 takes 10%.
+  it("applies a valid coupon and stores the discounted total", async () => {
+    const res = await post(validPayload({ couponCode: "YAZ10" }));
+    expect(res.status).toBe(201);
+    const order = (await res.json()) as Order;
+    expect(order.couponCode).toBe("YAZ10");
+    expect(order.discountAmount).toBe(2400);
+    expect(order.total).toBe(21600);
+  });
+
+  it("keeps line items at their full price when a coupon applies", async () => {
+    const order = (await (await post(validPayload({ couponCode: "YAZ10" }))).json()) as Order;
+    expect(order.items[0].unitPrice).toBe(12000);
+    expect(order.items[0].subtotal).toBe(24000);
+  });
+
+  it("matches the code case-insensitively and ignores surrounding spaces", async () => {
+    const order = (await (await post(validPayload({ couponCode: "  yaz10 " }))).json()) as Order;
+    expect(order.couponCode).toBe("YAZ10");
+    expect(order.total).toBe(21600);
+  });
+
+  it("stores no coupon and a zero discount when none is given", async () => {
+    const order = (await (await post(validPayload())).json()) as Order;
+    expect(order.couponCode).toBeNull();
+    expect(order.discountAmount).toBe(0);
+    expect(order.total).toBe(24000);
+  });
+
+  it("rejects a present but non-string coupon code instead of dropping it", async () => {
+    const res = await post(validPayload({ couponCode: 123 }));
+    expect(res.status).toBe(400);
+    expect(await errorOf(res)).toBe("Invalid coupon code");
+    expect(listOrders()).toHaveLength(0);
+  });
+
+  it("treats a blank coupon code as no coupon", async () => {
+    const order = (await (await post(validPayload({ couponCode: "   " }))).json()) as Order;
+    expect(order.couponCode).toBeNull();
+    expect(order.total).toBe(24000);
+  });
+
+  it("rounds the discount to the nearest cent", async () => {
+    updateProduct("espresso", { price: 3333 });
+    // 10% of 3 333 = 333.3 -> 333; total 3 000 for one unit.
+    const order = (await (
+      await post(validPayload({ items: [{ productId: "espresso", quantity: 1 }], couponCode: "YAZ10" }))
+    ).json()) as Order;
+    expect(order.discountAmount).toBe(333);
+    expect(order.total).toBe(3000);
+  });
+
+  it("rejects an unknown coupon and creates no order", async () => {
+    const res = await post(validPayload({ couponCode: "NOPE" }));
+    expect(res.status).toBe(422);
+    expect(await errorOf(res)).toBe("Invalid coupon code");
+    expect(listOrders()).toHaveLength(0);
+  });
+
+  it("rejects a coupon that expired before the order is placed", async () => {
+    // Applied in the cart while valid, then the order is placed after expiry.
+    vi.setSystemTime(new Date("2031-01-01T00:00:00.000Z"));
+    const res = await post(validPayload({ couponCode: "YAZ10" }));
+    expect(res.status).toBe(422);
+    expect(await errorOf(res)).toBe("Coupon has expired");
+    expect(listOrders()).toHaveLength(0);
+  });
+});

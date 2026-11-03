@@ -11,6 +11,8 @@ const seedOrder = () =>
     id: ORDER_ID,
     customer: { name: "Ada", email: "ada@example.test", phone: "555", address: "Street 1" },
     items: [{ productId: "espresso", productName: "Espresso", unitPrice: 12000, quantity: 1, subtotal: 12000 }],
+    couponCode: null,
+    discountAmount: 0,
     total: 12000,
     payment: { method: "card", last4: "4242" },
     status: "pending",

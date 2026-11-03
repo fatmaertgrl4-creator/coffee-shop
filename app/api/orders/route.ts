@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
-import { createOrder, getProduct } from "@/lib/store";
+import { createOrder, getCouponByCode, getProduct } from "@/lib/store";
+import { calculateDiscount, isCouponExpired, normalizeCouponCode } from "@/lib/coupons";
 import type { OrderItem } from "@/types/domain";
 
 const badRequest = (error: string) => NextResponse.json({ error }, { status: 400 });
+
+// 422 marks a coupon the customer cannot use. Cart and card errors stay 400.
+const invalidCoupon = (error: string) => NextResponse.json({ error }, { status: 422 });
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -14,7 +18,7 @@ export async function POST(request: Request) {
 
   if (typeof body !== "object" || body === null) return badRequest("Invalid request body");
 
-  const { customer, items, card } = body as Record<string, unknown>;
+  const { customer, items, card, couponCode } = body as Record<string, unknown>;
 
   if (typeof customer !== "object" || customer === null) return badRequest("Missing customer");
   if (!Array.isArray(items) || items.length === 0) return badRequest("Cart is empty");
@@ -47,6 +51,16 @@ export async function POST(request: Request) {
     });
   }
 
+  const subtotal = orderItems.reduce((sum, item) => sum + item.subtotal, 0);
+
+  // Revalidated here, not trusted from the cart: the coupon may have expired since it was applied.
+  if (couponCode != null && typeof couponCode !== "string") return badRequest("Invalid coupon code");
+  const normalizedCode = typeof couponCode === "string" ? normalizeCouponCode(couponCode) : "";
+  const coupon = normalizedCode === "" ? undefined : getCouponByCode(normalizedCode);
+  if (normalizedCode !== "" && !coupon) return invalidCoupon("Invalid coupon code");
+  if (coupon && isCouponExpired(coupon, new Date())) return invalidCoupon("Coupon has expired");
+  const discountAmount = coupon ? calculateDiscount(subtotal, coupon.percent) : 0;
+
   const k = card as Record<string, unknown>;
   const number = typeof k.number === "string" ? k.number.replace(/\D/g, "") : "";
   const expiry = typeof k.expiry === "string" ? k.expiry.trim() : "";
@@ -64,14 +78,15 @@ export async function POST(request: Request) {
   const expiryMonth = year * 12 + (month - 1);
   if (month < 1 || month > 12 || expiryMonth <= currentMonth) return badRequest("Card is expired");
 
-  const total = orderItems.reduce((sum, item) => sum + item.subtotal, 0);
   const timestamp = new Date().toISOString();
 
   const order = createOrder({
     id: crypto.randomUUID(),
     customer: { name, email, phone, address },
     items: orderItems,
-    total,
+    couponCode: coupon?.code ?? null,
+    discountAmount,
+    total: subtotal - discountAmount,
     payment: { method: "card", last4: number.slice(-4) },
     status: "pending",
     createdAt: timestamp,

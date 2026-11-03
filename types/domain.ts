@@ -47,6 +47,8 @@ export type Order = {
   id: string;
   customer: Customer;
   items: OrderItem[];
+  couponCode: string | null;
+  discountAmount: number;
   total: number;
   payment: { method: "card"; last4: string };
   status: OrderStatus;

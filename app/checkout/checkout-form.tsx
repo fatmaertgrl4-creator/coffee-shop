@@ -12,7 +12,7 @@ import type { Product } from "@/types/domain";
 
 export function CheckoutForm({ products }: { products: Product[] }) {
   const router = useRouter();
-  const { items, clear } = useCart();
+  const { items, clear, setCoupon } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expiry, setExpiry] = useState("");
@@ -56,6 +56,8 @@ export function CheckoutForm({ products }: { products: Product[] }) {
       });
       const data: unknown = await res.json();
       if (!res.ok) {
+        // 422 means the coupon was rejected (unknown or expired). Drop it so the total shown goes back to full price.
+        if (res.status === 422) setCoupon(null);
         setError(errorMessage(data, "Something went wrong"));
         return;
       }

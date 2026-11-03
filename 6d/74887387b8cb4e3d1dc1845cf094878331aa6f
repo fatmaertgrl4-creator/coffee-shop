@@ -1,0 +1,62 @@
+types/domain.ts
+  s_8c8d88acd44796::t_3dee56a8d99358 24-29
+  s_8c8d88acd44796::t_c0502073bdcd8d 30-37
+app/api/coupons/preview/route.test.ts
+  s_8c8d88acd44796::t_598e20392a6d44 90
+  s_8c8d88acd44796::t_4410040c251c0c 95
+  s_8c8d88acd44796::t_ac13076081e3c6 74
+  s_8c8d88acd44796::t_08f22cd1636a1b 71
+  s_8c8d88acd44796::t_9e7bf0d348c98f 1-39,41-70,72-73,75-89,91-94,96-123
+  s_8c8d88acd44796::t_7df64411b3a6a4 40
+tests/support/store.ts
+  s_8c8d88acd44796::t_3d240e5b1fffad 5,7
+  s_8c8d88acd44796::t_6d4416041c165d 2
+  s_8c8d88acd44796::t_ee7b41268a6581 21
+lib/coupons.test.ts
+  s_8c8d88acd44796::t_097e02beefa43c 2,4-12
+  s_8c8d88acd44796::t_df891253f792b6 1,3,13-63
+app/api/coupons/preview/route.ts
+  s_8c8d88acd44796::t_34f9532f72a0ef 1-6,10-41,44-54
+  s_8c8d88acd44796::t_9cec35b7d4f998 42-43
+  s_8c8d88acd44796::t_5fc97c5eb6a5f2 7-9
+components/cart-context.tsx
+  s_8c8d88acd44796::t_4b8961f6fd849a 17,21,29,39-40,43,49-50
+  s_8c8d88acd44796::t_cff15ca1fd6ed0 41-42
+  s_8c8d88acd44796::t_089993e047308b 69
+  s_8c8d88acd44796::t_52e6d9817b7c36 34
+  s_8c8d88acd44796::t_ed2efcbc1c8990 4-10
+app/globals.css
+  s_8c8d88acd44796::t_30d46d34919131 48-51
+lib/cart-storage.ts
+  s_8c8d88acd44796::t_a9e87898e5fdd8 5-13
+app/cart/cart-view.tsx
+  s_8c8d88acd44796::t_2f9745e813bcc2 8-10,12-26,31,34-35,38,42-43,45-47,49-51,54,61,67-77,85-86,133,135-136
+  s_8c8d88acd44796::t_000b9ee2607a06 5,11,29-30,32-33,36-37,39-41,44,48,52-53,55-60,62-66,78,84,123-132,134,137-141
+lib/cart-storage.test.ts
+  s_8c8d88acd44796::t_a733be61668031 2-14
+lib/store.ts
+  s_8c8d88acd44796::t_a1b9b504deb420 1,4,6,12-13,18-20
+  s_8c8d88acd44796::t_a7f70a50601774 37-38
+  s_8c8d88acd44796::t_88205cab50e1b9 3
+  s_8c8d88acd44796::t_80bd526a0f92c5 39
+lib/coupons.ts
+  s_8c8d88acd44796::t_a8ae9d8cdf2074 1-12
+data/coupons.json
+  s_8c8d88acd44796::t_9f01a6caee780d 1-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6d74887387b8cb4e3d1dc1845cf094878331aa6f",
+  "prompts": {},
+  "sessions": {
+    "s_8c8d88acd44796": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d392c758-5b52-44a5-ae92-90b89558add6",
+        "model": "claude-haiku-5-5"
+      },
+      "human_author": "FATMA ERTUGRUL <fatma.ertugrul@turkcell.com.tr>"
+    }
+  }
+}
